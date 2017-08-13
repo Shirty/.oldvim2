@@ -1,10 +1,12 @@
 " Author: Sebastian Weilhammer
-" Description: Rewrite of my vimrc for nvim
+" Description: Rewrite of my vimrc with compatibility with nvim
 " Notes:
 " - I used to document most lines... found out how to use help more efficiently ;)
 " TODO
 " - figure out why todo's are causing wrapping of text
 " - remove temporary folder created in each directory
+" - figure out everything with ctrl p for easy access to files
+" - hidden swp files? enough?
 
 " TODO look into automating if i need to install on multiple pc's? not usual so hardcoded for now
 let plugpath = ''
@@ -20,9 +22,16 @@ endif
 " TODO: check why by default this does not happen (I think i'm refering to the expand command...)
 call plug#begin(expand(plugpath))
 
-" Plug 'vim-airline/vim-airline'
-" Plug 'ctrlpvim/ctrlp.vim'
+" This works? other does not TODO
+Plug 'https://github.com/jiangmiao/auto-pairs'
+" Plug 'jlangmiao/auto-pairs'
+
+Plug 'ctrlpvim/ctrlp.vim'
+
+Plug 'Valloric/YouCompleteMe'
+
 " Plug 'Raimondi/delimitMate'
+" Plug 'vim-airline/vim-airline'
 " Plug 'https://github.com/justinj/vim-pico8-syntax.git' " Not sure why but had to have full link here look this up #TODO
 " Plug 'equalsraf/neovim-gui-shim' " for the gui? figure out what is going wront
 " Plug 'tpope/vim-surround'
@@ -30,8 +39,8 @@ call plug#begin(expand(plugpath))
 
 call plug#end()
 
-let mapleader="."
-let maplocalleader=","
+let mapleader=","
+" let maplocalleader="," " never use it..?
 
 set backspace=indent,eol,start " backspace behaviour
 set number
@@ -58,6 +67,8 @@ nnoremap <leader>n :noh<cr> " quick remove hightlight
 set visualbell " setting visual bell instead of sound
 set t_vb= " set visual bell to nothing
 
+set encoding=utf-8 " why not? mainly for YouCompleteMe
+
 set expandtab " expand tab to spaces
 set tabstop=4 " amount of spaces to expand to
 set shiftwidth=4 " amount of spaces inserted for indentation etc
@@ -76,6 +87,7 @@ set shiftwidth=4 " amount of spaces inserted for indentation etc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>eV :e $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
+nnoremap <c-g> <c-]> " mainly because i'm used to doing this in vs and still use vs
 
 " quick save/exit
 nnoremap <leader>s :w<cr>
@@ -89,6 +101,10 @@ augroup general
 	" --> autocmd BufEnter * silent! lcd %:p:h
 augroup END
 
+" to allow for project specific settings
+" set exrc
+" set secure
+"
 augroup vimscript
 	autocmd!
 	autocmd FileType vim setlocal foldmethod=marker
@@ -99,9 +115,12 @@ augroup END
 
 augroup cpp
 	autocmd!
-	autocmd FileType c++ setlocal expandtab
-	autocmd FileType c++ setlocal tabstop=4
-	autocmd FileType c++ setlocal shiftwidth=4
+    " just for cpp i want to have specific settings
+    autocmd FileType cpp,c setlocal colorcolumn=110
+	autocmd FileType cpp,c setlocal expandtab
+	autocmd FileType cpp,c setlocal tabstop=4
+	autocmd FileType cpp,c setlocal shiftwidth=4
+    autocmd FileType cpp,c setlocal cindent
 augroup END
 
 augroup pico8
