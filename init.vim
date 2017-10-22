@@ -1,5 +1,6 @@
 " Author: Sebastian Weilhammer
-" Description: Rewrite of my vimrc with compatibility with nvim
+" Description: Rewrite of my vimrc with compatibility with nvim also... I
+" couldn't stand looking at my old one anymore!!
 " Notes:
 " - I used to document most lines... found out how to use help more efficiently ;)
 " TODO
@@ -24,15 +25,19 @@ call plug#begin(expand(plugpath))
 
 " This works? other does not TODO
 Plug 'https://github.com/jiangmiao/auto-pairs'
+Plug 'lervag/vimtex'
 " Plug 'jlangmiao/auto-pairs'
 
 Plug 'ctrlpvim/ctrlp.vim'
 
 Plug 'Valloric/YouCompleteMe'
 
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-easytags'
+
 " Plug 'Raimondi/delimitMate'
 " Plug 'vim-airline/vim-airline'
-" Plug 'https://github.com/justinj/vim-pico8-syntax.git' " Not sure why but had to have full link here look this up #TODO
+" Plug 'https://github.com/justinj/vim-pico8-syntax.git' " Not sure why but had to have full link here look this up TODO
 " Plug 'equalsraf/neovim-gui-shim' " for the gui? figure out what is going wront
 " Plug 'tpope/vim-surround'
 " Plug 'c.vim'
@@ -56,6 +61,12 @@ function! NumberToggle()
 endfunction
 " }}}
 nnoremap <C-n> :call NumberToggle()<cr>
+
+if has("gui_running")
+    if has("gui_win32")
+        set guifont=Consolas:h10:b:cANSI
+    endif
+endif
 
 colorscheme darkblue
 set cursorline
@@ -100,6 +111,14 @@ augroup general
 	" if i want to move to directory of file i am currently working on by default
 	" --> autocmd BufEnter * silent! lcd %:p:h
 augroup END
+
+" YCM settings
+nnoremap <m-g> :YcmCompleter GoTo<cr>
+
+" vimtex
+let g:vimtex_view_general_viewer = 'SumatraPDF'
+let g:vimtex_view_general_options = '=reuse-instance -forward-search @text @line @pdf'
+let g:vimtex_view_general_options_latexmk = '-reuse-instance'
 
 " to allow for project specific settings
 " set exrc
